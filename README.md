@@ -17,7 +17,8 @@ node serve.ts
 2. Pick a layout, a post size and a colour grade; type your title and subtitle.
 3. Click a panel to select it, drag to move its photo, or use the zoom/pan sliders — "Fill all panels with this photo" spreads one photo across the cover.
 4. Enhance the selected panel: Auto-enhance in one click, a preset, or the five sliders.
-5. Export PNG.
+5. Compare before and after: hold "Hold to see original" (or the C key) to see the selected panel without its Enhance dials, and "Copy enhance to all panels" spreads one panel's five dials across the whole cover. Keyboard shortcuts: 1–5 pick a colour grade, E auto-enhances the selected panel, C compares while held.
+6. Export PNG.
 
 ## Methodology
 

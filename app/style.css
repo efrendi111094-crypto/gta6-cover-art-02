@@ -35,6 +35,9 @@ button.active { background: linear-gradient(135deg, #ff2d78, #ff7a3d); border-co
 .grades button::before { content: ""; position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; border-radius: 50%; background: var(--sw); }
 .auto { width: 100%; margin-bottom: 10px; padding: 11px; background: linear-gradient(135deg, #00b3c8, #00e5ff); border: 0; color: #0a0a14; box-shadow: 0 4px 16px rgba(0, 229, 255, 0.35); }
 .auto:hover { border: 0; filter: brightness(1.1); }
+.compare { width: 100%; margin-bottom: 10px; padding: 11px; background: #2a1540; border: 1px dashed #00e5ff; color: #7df3ff; }
+.compare:hover { border-color: #00e5ff; background: #33204d; }
+.compare.comparing { background: linear-gradient(135deg, #00b3c8, #00e5ff); border-style: solid; border-color: transparent; color: #0a0a14; }
 .presets { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 .presets button { font-size: 12.5px; line-height: 1.3; padding: 8px 6px; background: #2a1540; }
 .thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }

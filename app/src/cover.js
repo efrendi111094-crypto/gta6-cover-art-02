@@ -48,6 +48,9 @@ export function defaultState() {
       enhance: defaultEnhance(),
     })),
     selected: 0,
+    // While true, the selected panel draws without its Enhance dials (the
+    // Compare view); exports always clear it first, so a PNG is never raw.
+    comparing: false,
   };
 }
 
@@ -129,10 +132,12 @@ const SHARPEN_MAX_SIDE = 1200;
  * its Enhance dials. Brightness, contrast and saturation ride on ctx.filter;
  * warmth is a tint overlay; sharpness goes through a panel-sized offscreen
  * canvas (capped at SHARPEN_MAX_SIDE so a full-bleed panel stays quick),
- * sharpened by convolution and drawn back in.
+ * sharpened by convolution and drawn back in. Pass raw=true to draw the
+ * photo untouched instead — the before/after Compare view, while the
+ * Compare button (or the C key) is held on the selected panel.
  */
-function drawPanelPhoto(ctx, img, rect, panel) {
-  const enhance = panel.enhance ?? defaultEnhance();
+function drawPanelPhoto(ctx, img, rect, panel, raw = false) {
+  const enhance = raw ? defaultEnhance() : (panel.enhance ?? defaultEnhance());
   const base = Math.max(rect.w / img.naturalWidth, rect.h / img.naturalHeight) * panel.zoom;
   const pw = img.naturalWidth * base;
   const ph = img.naturalHeight * base;
@@ -365,7 +370,8 @@ export function drawCover(canvas, state, opts = {}) {
   for (let i = 0; i < count; i++) {
     const panel = state.panels[i];
     const img = panel.photo >= 0 ? state.photos[panel.photo] : null;
-    if (img) drawPanelPhoto(ctx, img, panels[i], panel);
+    const comparing = state.comparing && i === state.selected;
+    if (img) drawPanelPhoto(ctx, img, panels[i], panel, comparing);
     else drawEmptyPanel(ctx, panels[i]);
     applyGrade(ctx, panels[i], grade);
   }
@@ -411,6 +417,24 @@ export function drawCover(canvas, state, opts = {}) {
     ctx.lineWidth = Math.max(3, Math.min(W, H) * 0.006);
     ctx.setLineDash([Math.min(W, H) * 0.02, Math.min(W, H) * 0.01]);
     ctx.strokeRect(r.x + 2, r.y + 2, r.w - 4, r.h - 4);
+    ctx.restore();
+  }
+  if (state.comparing && opts.selected != null && opts.selected < count) {
+    // A small tag on the panel being compared, so the original view is
+    // unmistakable even when the enhance is subtle. Exports pass no
+    // selection, so the tag never reaches a PNG.
+    const r = panels[opts.selected];
+    const tag = 'ORIGINAL';
+    ctx.save();
+    ctx.font = `900 ${Math.max(12, r.w * 0.05)}px ${TITLE_FAMILY}`;
+    const tw = ctx.measureText(tag).width;
+    const pad = Math.max(6, r.w * 0.02);
+    const th = Math.max(18, r.w * 0.08);
+    ctx.fillStyle = 'rgba(10,4,18,0.8)';
+    ctx.fillRect(r.x + pad, r.y + pad, tw + pad * 2, th);
+    ctx.fillStyle = '#7df3ff';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(tag, r.x + pad * 2, r.y + pad + th / 2);
     ctx.restore();
   }
 }

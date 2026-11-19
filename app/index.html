@@ -94,6 +94,7 @@
     <section id="enhanceSection">
       <h2>Enhance — <span id="enhanceLabel">Panel 1 of 8</span></h2>
       <button id="autoEnhance" type="button" class="auto">Auto-enhance this panel</button>
+      <button id="compareBtn" type="button" class="compare" aria-pressed="false">Hold to see original</button>
       <div class="presets">
         <button type="button" data-preset="golden">Golden Hour</button>
         <button type="button" data-preset="neon">Neon Pop</button>
@@ -115,9 +116,11 @@
         <input id="enh-warmth" type="range" min="-50" max="50" step="1" value="0">
       </label>
       <div class="row">
+        <button id="copyEnhance" type="button">Copy enhance to all panels</button>
         <button id="resetEnhance" type="button">Reset enhance</button>
       </div>
       <p class="note">Enhance tunes only the selected panel — Auto-enhance lifts light, colour and sharpness in one click. Every change shows in the preview and in the exported PNG.</p>
+      <p class="note">Shortcuts: keys 1&ndash;5 pick a colour grade, E auto-enhances this panel, hold C to compare with the original.</p>
     </section>
     <section>
       <h2>Finish</h2>

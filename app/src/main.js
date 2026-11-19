@@ -3,7 +3,7 @@
 // slider, PNG out. A `?shot=` query sets up a fixed scene for a screenshot
 // instead (./shots.js).
 import { drawCover, defaultState, layoutRects, LAYOUTS, SIZES, GRADES } from './cover.js';
-import { AUTO_ENHANCE, ENHANCE_PRESETS, defaultEnhance } from './enhance.js';
+import { AUTO_ENHANCE, ENHANCE_PRESETS, defaultEnhance, isDefaultEnhance } from './enhance.js';
 import { runShot } from './shots.js';
 
 const canvas = document.getElementById('cover');
@@ -224,6 +224,44 @@ document.getElementById('resetEnhance').addEventListener('click', () => {
   render();
   statusEl.textContent = 'Enhance reset for this panel.';
 });
+
+// Compare: while the button (or the C key) is held, the selected panel draws
+// without its Enhance dials, so the original and the tuned photo can be
+// judged back to back. Releasing restores the enhanced view at once.
+const compareBtn = document.getElementById('compareBtn');
+function setComparing(on) {
+  if (state.comparing === on) return;
+  state.comparing = on;
+  compareBtn.classList.toggle('comparing', on);
+  compareBtn.setAttribute('aria-pressed', String(on));
+  compareBtn.textContent = on ? 'Showing original — release to compare' : 'Hold to see original';
+  render();
+  // An un-enhanced panel looks identical under Compare, so say so instead of
+  // promising an enhanced version that does not exist yet.
+  if (on && isDefaultEnhance(selectedPanel().enhance)) {
+    statusEl.textContent = 'This panel has no Enhance applied yet — nothing to compare. Try Auto-enhance first.';
+  } else {
+    statusEl.textContent = on
+      ? 'Showing the original photo — release the button to see the enhanced version.'
+      : 'Back to the enhanced photo.';
+  }
+}
+compareBtn.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  setComparing(true);
+});
+for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) {
+  compareBtn.addEventListener(ev, () => setComparing(false));
+}
+
+// Copy enhance: spreads the selected panel's five dials to every panel of
+// the cover, so one good look can be applied everywhere in a single click.
+document.getElementById('copyEnhance').addEventListener('click', () => {
+  const dials = { ...selectedPanel().enhance };
+  for (let i = 0; i < panelCount(); i++) state.panels[i].enhance = { ...dials };
+  render();
+  statusEl.textContent = `Enhance copied to all ${panelCount()} panels.`;
+});
 for (const id of ['grain', 'vignette', 'frame']) {
   document.getElementById(id).addEventListener('change', (e) => {
     state[id] = e.target.checked;
@@ -231,12 +269,48 @@ for (const id of ['grain', 'vignette', 'frame']) {
   });
 }
 
+// Keyboard shortcuts: 1–5 pick the five colour grades in button order, E
+// runs Auto-enhance on the selected panel, and holding C compares the
+// selected panel with its original. Ignored while typing in a text field,
+// and ignored with a modifier key, so browser shortcuts keep working.
+const GRADE_KEYS = ['sunset', 'neon', 'vice', 'heat', 'noir'];
+function typingInField(e) {
+  const tag = e.target?.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+}
+document.addEventListener('keydown', (e) => {
+  if (typingInField(e) || e.metaKey || e.ctrlKey || e.altKey) return;
+  const digit = Number(e.key);
+  if (digit >= 1 && digit <= GRADE_KEYS.length) {
+    state.grade = GRADE_KEYS[digit - 1];
+    render();
+    statusEl.textContent = `${GRADES[state.grade].name} grade selected.`;
+    return;
+  }
+  if (e.repeat) return;
+  if (e.key === 'e' || e.key === 'E') {
+    selectedPanel().enhance = { ...AUTO_ENHANCE };
+    render();
+    statusEl.textContent = 'Auto-enhance applied to this panel — light, colour and sharpness lifted.';
+  } else if (e.key === 'c' || e.key === 'C') {
+    setComparing(true);
+  }
+});
+document.addEventListener('keyup', (e) => {
+  if (e.key === 'c' || e.key === 'C') setComparing(false);
+});
+
 document.getElementById('export').addEventListener('click', () => {
   const size = SIZES[state.size];
   const off = document.createElement('canvas');
   off.width = size.w;
   off.height = size.h;
+  // An export never carries the Compare view: the PNG always shows the
+  // enhanced cover, even if the C key is still held when Export is clicked.
+  const wasComparing = state.comparing;
+  state.comparing = false;
   drawCover(off, state, {});
+  state.comparing = wasComparing;
   off.toBlob((blob) => {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
