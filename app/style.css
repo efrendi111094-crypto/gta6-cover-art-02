@@ -1,0 +1,61 @@
+/* Vice Coast Cover Studio 2: a dark neon editor shell around the cover canvas. */
+html, body { margin: 0; min-height: 100%; background: #14081f; color: #f4eef8; font: 15px/1.45 system-ui, -apple-system, sans-serif; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 14px 24px; background: linear-gradient(90deg, #2b0a3d, #7a1048 55%, #c2187a); border-bottom: 3px solid #ff9a3d; }
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 10px; background: linear-gradient(135deg, #ff9a3d, #ff2d78); color: #fff; font-weight: 900; font-size: 19px; letter-spacing: 1px; box-shadow: 0 0 18px rgba(255, 45, 120, 0.55); }
+.brand h1 { margin: 0; font-size: 21px; letter-spacing: 0.5px; }
+.brand p { margin: 2px 0 0; color: #ffd9ec; font-size: 13px; }
+.version { display: inline-block; padding: 1px 7px; margin-left: 4px; border-radius: 999px; background: #00e5ff; color: #0a0a14; font-size: 11px; font-weight: 900; letter-spacing: 1px; vertical-align: middle; }
+.steps { display: flex; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.steps li { padding: 7px 12px; border-radius: 999px; background: rgba(0, 0, 0, 0.28); font-size: 13px; font-weight: 600; white-space: nowrap; }
+.steps b { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 6px; border-radius: 50%; background: #ff9a3d; color: #1d0a2e; font-size: 12px; }
+.app { display: flex; gap: 24px; padding: 20px 24px 28px; align-items: flex-start; }
+.controls { width: 320px; flex: none; display: flex; flex-direction: column; gap: 16px; }
+.controls section { background: #1e0f2e; border: 1px solid #3a1c56; border-radius: 12px; padding: 14px; }
+.controls h2 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: #ffb43c; }
+.controls label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 13px; margin-bottom: 10px; }
+.controls label:last-child { margin-bottom: 0; }
+.controls input[type=text], .controls select { font: inherit; color: #f4eef8; background: #14081f; border: 1px solid #5b2f7d; border-radius: 7px; padding: 8px 10px; }
+.controls input[type=text]:focus, .controls select:focus { outline: 2px solid #00e5ff; }
+.controls input[type=range] { accent-color: #ff2d78; width: 100%; }
+.file { display: block; padding: 10px; text-align: center; border: 2px dashed #ff2d78; border-radius: 8px; cursor: pointer; background: rgba(255, 45, 120, 0.08); }
+.file input { display: none; }
+.row { display: flex; gap: 8px; }
+.row > * { flex: 1; }
+button { font: inherit; font-weight: 700; color: #f4eef8; background: #3a1c56; border: 1px solid #5b2f7d; border-radius: 8px; padding: 9px 10px; cursor: pointer; }
+button:hover { border-color: #ff2d78; }
+button.active { background: linear-gradient(135deg, #ff2d78, #ff7a3d); border-color: transparent; color: #fff; }
+.grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.grid3 button { font-size: 12.5px; line-height: 1.3; padding: 8px 6px; }
+.samples { margin-top: 10px; }
+.samples button { font-size: 12.5px; }
+.grades { display: flex; flex-wrap: wrap; gap: 8px; }
+.grades button { position: relative; padding-left: 30px; }
+.grades button::before { content: ""; position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; border-radius: 50%; background: var(--sw); }
+.auto { width: 100%; margin-bottom: 10px; padding: 11px; background: linear-gradient(135deg, #00b3c8, #00e5ff); border: 0; color: #0a0a14; box-shadow: 0 4px 16px rgba(0, 229, 255, 0.35); }
+.auto:hover { border: 0; filter: brightness(1.1); }
+.presets { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.presets button { font-size: 12.5px; line-height: 1.3; padding: 8px 6px; background: #2a1540; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.thumb { padding: 0; border: 2px solid #5b2f7d; border-radius: 6px; overflow: hidden; width: 64px; height: 64px; background: none; }
+.thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.thumb:hover { border-color: #00e5ff; }
+.note { margin: 8px 0 0; color: #b9a6c9; font-size: 12.5px; font-weight: 400; }
+.check { flex-direction: row !important; align-items: center; gap: 8px !important; font-weight: 600; }
+.check input { accent-color: #ff2d78; width: 16px; height: 16px; }
+.export { width: 100%; margin-top: 6px; padding: 13px; font-size: 16px; background: linear-gradient(135deg, #ff2d78, #ff7a3d); border: 0; box-shadow: 0 4px 18px rgba(255, 45, 120, 0.4); }
+#status { min-height: 1.2em; margin: 8px 0 0; color: #7df3ff; font-size: 13px; }
+.stage { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; }
+#cover { width: min(100%, calc(100vh - 190px)); height: auto; max-height: calc(100vh - 190px); background: #160a24; border-radius: 6px; box-shadow: 0 14px 44px rgba(0, 0, 0, 0.55); cursor: crosshair; touch-action: none; }
+.hint { margin: 0; color: #b9a6c9; font-size: 13px; text-align: center; }
+/* Screenshot scenes: the cover alone, filling the frame. */
+body.shot-cover .topbar, body.shot-cover .controls, body.shot-cover .hint { display: none; }
+body.shot-cover .app { padding: 0; }
+body.shot-cover .stage { width: 100vw; }
+body.shot-cover #cover { width: 100vw; height: 100vh; max-height: none; border-radius: 0; box-shadow: none; }
+@media (max-width: 900px) {
+  .app { flex-direction: column; }
+  .controls { width: 100%; }
+  .topbar { flex-direction: column; align-items: flex-start; }
+}

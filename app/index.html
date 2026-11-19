@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Coast — Cover Studio 2</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">VC</span>
+    <div>
+      <h1>Vice Coast Cover Studio <span class="version">v2</span></h1>
+      <p>Any photo &rarr; a GTA-style poster cover. One-click Enhance, offline, no upload, PNG out.</p>
+    </div>
+  </div>
+  <ol class="steps" aria-label="Three steps">
+    <li><b>1</b> Photo</li>
+    <li><b>2</b> Style &amp; Enhance</li>
+    <li><b>3</b> Export PNG</li>
+  </ol>
+</header>
+<main class="app">
+  <aside class="controls" aria-label="Cover controls">
+    <section>
+      <h2>Photos</h2>
+      <label class="file">Add your photos
+        <input id="photo" type="file" accept="image/*" multiple>
+      </label>
+      <div class="grid3 samples">
+        <button id="sample-boulevard" type="button">Boulevard</button>
+        <button id="sample-pier" type="button">Pier</button>
+        <button id="sample-neon" type="button">Neon street</button>
+        <button id="sample-convertible" type="button">Convertible</button>
+        <button id="sample-beach" type="button">Beach</button>
+        <button id="sample-boardwalk" type="button">Boardwalk</button>
+      </div>
+      <div id="thumbs" class="thumbs" aria-label="Loaded photos"></div>
+      <p class="note">Photos never leave your machine. Click a thumbnail to put it in the selected panel.</p>
+    </section>
+    <section>
+      <h2>Layout</h2>
+      <div class="grid4">
+        <button type="button" data-layout="nine">Nine Panel</button>
+        <button type="button" data-layout="hero">Hero + Three</button>
+        <button type="button" data-layout="four">Four Square</button>
+        <button type="button" data-layout="bleed">Full Bleed</button>
+      </div>
+    </section>
+    <section>
+      <h2>Post size</h2>
+      <div class="grid3">
+        <button type="button" data-size="1080x1080">Square<br>1080 &times; 1080</button>
+        <button type="button" data-size="1080x1350">Portrait<br>1080 &times; 1350</button>
+        <button type="button" data-size="1920x1080">Landscape<br>1920 &times; 1080</button>
+      </div>
+    </section>
+    <section>
+      <h2>Colour grade</h2>
+      <div class="grades">
+        <button type="button" data-grade="sunset" style="--sw: linear-gradient(135deg,#ff9a3d,#ff2d78)">Sunset</button>
+        <button type="button" data-grade="neon" style="--sw: linear-gradient(135deg,#ff2d95,#00e5ff)">Neon Night</button>
+        <button type="button" data-grade="vice" style="--sw: linear-gradient(135deg,#8c3cdc,#ffb43c)">Vice Gold</button>
+        <button type="button" data-grade="heat" style="--sw: linear-gradient(135deg,#ff7800,#ff1e0a)">Heat Wave</button>
+        <button type="button" data-grade="noir" style="--sw: linear-gradient(135deg,#00506e,#0a0a14)">Noir Teal</button>
+      </div>
+    </section>
+    <section>
+      <h2>Caption</h2>
+      <label>Title <input id="title" type="text" maxlength="28" value="VICE COAST"></label>
+      <label>Subtitle <input id="subtitle" type="text" maxlength="40" value="one last ride"></label>
+    </section>
+    <section>
+      <h2>Selected panel — <span id="panelLabel">Panel 1 of 8</span></h2>
+      <label>Photo in this panel
+        <select id="panelPhoto"><option value="-1">Empty panel</option></select>
+      </label>
+      <label>Zoom <span id="zoomVal">100%</span>
+        <input id="zoom" type="range" min="1" max="3" step="0.01" value="1">
+      </label>
+      <label>Move left / right
+        <input id="panX" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+      </label>
+      <label>Move up / down
+        <input id="panY" type="range" min="-0.5" max="0.5" step="0.01" value="0">
+      </label>
+      <div class="row">
+        <button id="fillAll" type="button">Fill all panels with this photo</button>
+        <button id="resetCrop" type="button">Reset crop</button>
+      </div>
+      <p class="note">Or click a panel in the preview, then drag it to move the photo.</p>
+    </section>
+    <section id="enhanceSection">
+      <h2>Enhance — <span id="enhanceLabel">Panel 1 of 8</span></h2>
+      <button id="autoEnhance" type="button" class="auto">Auto-enhance this panel</button>
+      <div class="presets">
+        <button type="button" data-preset="golden">Golden Hour</button>
+        <button type="button" data-preset="neon">Neon Pop</button>
+        <button type="button" data-preset="clean">Clean &amp; Bright</button>
+      </div>
+      <label>Brightness <span id="brightnessVal">0</span>
+        <input id="enh-brightness" type="range" min="-50" max="50" step="1" value="0">
+      </label>
+      <label>Contrast <span id="contrastVal">0</span>
+        <input id="enh-contrast" type="range" min="-50" max="50" step="1" value="0">
+      </label>
+      <label>Saturation <span id="saturationVal">0</span>
+        <input id="enh-saturation" type="range" min="-50" max="50" step="1" value="0">
+      </label>
+      <label>Sharpness <span id="sharpnessVal">0</span>
+        <input id="enh-sharpness" type="range" min="0" max="100" step="1" value="0">
+      </label>
+      <label>Warmth <span id="warmthVal">0</span>
+        <input id="enh-warmth" type="range" min="-50" max="50" step="1" value="0">
+      </label>
+      <div class="row">
+        <button id="resetEnhance" type="button">Reset enhance</button>
+      </div>
+      <p class="note">Enhance tunes only the selected panel — Auto-enhance lifts light, colour and sharpness in one click. Every change shows in the preview and in the exported PNG.</p>
+    </section>
+    <section>
+      <h2>Finish</h2>
+      <label class="check"><input id="grain" type="checkbox" checked> Film grain</label>
+      <label class="check"><input id="vignette" type="checkbox" checked> Vignette</label>
+      <label class="check"><input id="frame" type="checkbox" checked> White poster frame</label>
+      <button id="export" type="button" class="export">Export PNG</button>
+      <p id="status" role="status"></p>
+    </section>
+  </aside>
+  <section class="stage">
+    <canvas id="cover" width="1080" height="1080" aria-label="Cover preview"></canvas>
+    <p class="hint">Click a panel to select it &middot; drag to move its photo &middot; the dashed cyan edge is the selected panel</p>
+  </section>
+</main>
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
